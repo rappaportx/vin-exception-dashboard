@@ -440,7 +440,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
         </svg>
-        Interactive VIN Matrix - Click Any Row to See VINs
+        Interactive VIN Matrix (31 Combinations) - Click Any Row to See VINs
     </h2>
 
     <!-- Legend -->
@@ -515,31 +515,41 @@
     </div>
 
     <script>
-        // Matrix data from BigQuery
+        // Matrix data from BigQuery - All 31 possible combinations (2^5 - 1)
         const matrixData = [
-            {cdk:0,vauto:0,lojack:1,oem:0,floor:0,count:10096,priority:4,status:"REVIEW: Check flags",action:"Investigate LoJack-only records"},
+            // High volume combinations
+            {cdk:0,vauto:0,lojack:1,oem:0,floor:0,count:10096,priority:4,status:"REVIEW: LoJack only",action:"Investigate LoJack-only records"},
             {cdk:1,vauto:0,lojack:0,oem:0,floor:0,count:7791,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto - inventory not online"},
             {cdk:1,vauto:0,lojack:1,oem:0,floor:0,count:5036,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto immediately"},
-            {cdk:0,vauto:1,lojack:1,oem:0,floor:0,count:3227,priority:2,status:"HIGH: vAuto without CDK",action:"Remove listing or fix CDK entry"},
-            {cdk:1,vauto:1,lojack:1,oem:0,floor:1,count:3203,priority:4,status:"OK: Core aligned",action:"Fully synced - no action needed"},
-            {cdk:1,vauto:1,lojack:1,oem:0,floor:0,count:3072,priority:4,status:"OK: Core aligned",action:"Fully synced - no action needed"},
-            {cdk:0,vauto:1,lojack:0,oem:0,floor:0,count:2532,priority:2,status:"HIGH: vAuto without CDK",action:"Remove ghost listing"},
+            {cdk:0,vauto:1,lojack:1,oem:0,floor:0,count:3227,priority:2,status:"HIGH: Ghost listing",action:"Remove listing or fix CDK entry"},
+            {cdk:1,vauto:1,lojack:1,oem:0,floor:1,count:3203,priority:4,status:"OK: Fully synced",action:"All 4 core systems aligned"},
+            {cdk:1,vauto:1,lojack:1,oem:0,floor:0,count:3072,priority:4,status:"OK: Core aligned",action:"CDK+vAuto+LoJack synced"},
+            {cdk:0,vauto:1,lojack:0,oem:0,floor:0,count:2532,priority:2,status:"HIGH: Ghost listing",action:"Remove ghost listing from vAuto"},
             {cdk:0,vauto:1,lojack:1,oem:0,floor:1,count:2353,priority:1,status:"CRITICAL: FloorPlan w/o CDK",action:"URGENT: Enter in CDK - paying interest!"},
-            {cdk:1,vauto:1,lojack:0,oem:0,floor:0,count:1558,priority:3,status:"MEDIUM: No LoJack",action:"Install GPS tracking"},
-            {cdk:1,vauto:1,lojack:0,oem:0,floor:1,count:1319,priority:3,status:"MEDIUM: No LoJack",action:"Install GPS tracking"},
+            {cdk:1,vauto:1,lojack:0,oem:0,floor:0,count:1558,priority:3,status:"MEDIUM: No tracking",action:"Install LoJack GPS"},
+            {cdk:1,vauto:1,lojack:0,oem:0,floor:1,count:1319,priority:3,status:"MEDIUM: No tracking",action:"Install LoJack GPS"},
             {cdk:0,vauto:1,lojack:0,oem:0,floor:1,count:1127,priority:1,status:"CRITICAL: FloorPlan w/o CDK",action:"URGENT: Enter in CDK - paying interest!"},
-            {cdk:1,vauto:1,lojack:1,oem:1,floor:0,count:404,priority:4,status:"OK: Core aligned",action:"All systems synced"},
+            {cdk:1,vauto:1,lojack:1,oem:1,floor:0,count:404,priority:4,status:"OK: All systems",action:"All 4 sources aligned"},
             {cdk:0,vauto:0,lojack:0,oem:0,floor:1,count:346,priority:1,status:"CRITICAL: FloorPlan w/o CDK",action:"URGENT: Enter in CDK - paying interest!"},
-            {cdk:0,vauto:0,lojack:0,oem:1,floor:0,count:255,priority:1,status:"CRITICAL: OEM not in CDK",action:"Check receiving dock"},
-            {cdk:0,vauto:1,lojack:0,oem:1,floor:0,count:241,priority:1,status:"CRITICAL: OEM not in CDK",action:"Check receiving dock"},
-            {cdk:1,vauto:1,lojack:0,oem:1,floor:0,count:214,priority:3,status:"MEDIUM: No LoJack",action:"Install GPS tracking"},
-            {cdk:0,vauto:1,lojack:1,oem:1,floor:0,count:212,priority:1,status:"CRITICAL: OEM not in CDK",action:"Check receiving dock"},
+            {cdk:0,vauto:0,lojack:0,oem:1,floor:0,count:255,priority:1,status:"CRITICAL: OEM not received",action:"Check receiving dock"},
+            {cdk:0,vauto:1,lojack:0,oem:1,floor:0,count:241,priority:1,status:"CRITICAL: OEM not received",action:"Check receiving dock + remove vAuto"},
+            {cdk:1,vauto:1,lojack:0,oem:1,floor:0,count:214,priority:3,status:"MEDIUM: No tracking",action:"Install LoJack GPS"},
+            {cdk:0,vauto:1,lojack:1,oem:1,floor:0,count:212,priority:1,status:"CRITICAL: OEM not received",action:"Check receiving dock"},
             {cdk:1,vauto:0,lojack:1,oem:0,floor:1,count:187,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto"},
             {cdk:0,vauto:0,lojack:1,oem:0,floor:1,count:146,priority:1,status:"CRITICAL: FloorPlan w/o CDK",action:"URGENT: Enter in CDK - paying interest!"},
-            {cdk:1,vauto:0,lojack:0,oem:0,floor:1,count:87,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto"},
+            {cdk:1,vauto:0,lojack:0,oem:0,floor:1,count:87,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto + install LoJack"},
             {cdk:1,vauto:0,lojack:1,oem:1,floor:0,count:31,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto"},
-            {cdk:1,vauto:0,lojack:0,oem:1,floor:0,count:13,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto"},
-            {cdk:0,vauto:0,lojack:1,oem:1,floor:0,count:9,priority:1,status:"CRITICAL: OEM not in CDK",action:"Check receiving dock"}
+            {cdk:1,vauto:0,lojack:0,oem:1,floor:0,count:13,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto + install LoJack"},
+            {cdk:0,vauto:0,lojack:1,oem:1,floor:0,count:9,priority:1,status:"CRITICAL: OEM not received",action:"Check receiving dock"},
+            {cdk:1,vauto:1,lojack:1,oem:1,floor:1,count:4,priority:4,status:"OK: Perfect sync",action:"All 5 systems aligned"},
+            {cdk:1,vauto:1,lojack:0,oem:1,floor:1,count:2,priority:3,status:"MEDIUM: No tracking",action:"Install LoJack GPS"},
+            {cdk:1,vauto:0,lojack:1,oem:1,floor:1,count:1,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto"},
+            // Zero-count combinations (theoretically possible but no vehicles currently)
+            {cdk:0,vauto:0,lojack:0,oem:1,floor:1,count:0,priority:1,status:"CRITICAL: OEM+Floor w/o CDK",action:"Check receiving - double risk!"},
+            {cdk:0,vauto:0,lojack:1,oem:1,floor:1,count:0,priority:1,status:"CRITICAL: OEM+Floor w/o CDK",action:"Check receiving - double risk!"},
+            {cdk:0,vauto:1,lojack:0,oem:1,floor:1,count:0,priority:1,status:"CRITICAL: OEM+Floor w/o CDK",action:"Check receiving - double risk!"},
+            {cdk:0,vauto:1,lojack:1,oem:1,floor:1,count:0,priority:1,status:"CRITICAL: OEM+Floor w/o CDK",action:"Check receiving - double risk!"},
+            {cdk:1,vauto:0,lojack:0,oem:1,floor:1,count:0,priority:2,status:"HIGH: Not marketed",action:"Add to vAuto + install LoJack"}
         ];
 
         // Sample VINs per combination (from BigQuery)
