@@ -43,10 +43,52 @@
             margin-top: 10px;
         }
 
+        /* Quick Action Buttons */
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .action-btn.primary {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+            color: white;
+            border: none;
+        }
+        .action-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,212,255,0.4);
+        }
+        .action-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+        }
+        .action-btn.secondary:hover {
+            background: rgba(0,212,255,0.2);
+        }
+        .action-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
         /* KPI Cards */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -63,18 +105,18 @@
             box-shadow: 0 10px 30px rgba(0,212,255,0.2);
         }
         .kpi-value {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: bold;
             margin-bottom: 5px;
         }
         .kpi-label {
             color: #a0a0a0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .kpi-change {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-top: 8px;
             padding: 3px 10px;
             border-radius: 20px;
@@ -102,7 +144,7 @@
         }
         .financial-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
         .financial-card {
@@ -115,12 +157,12 @@
         .financial-card.warning { border-left-color: #ffaa00; }
         .financial-card.info { border-left-color: #00d4ff; }
         .financial-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #a0a0a0;
             margin-bottom: 10px;
         }
         .financial-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
         }
         .financial-detail {
@@ -139,7 +181,7 @@
         }
         .exception-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -170,7 +212,7 @@
         .status-dot.medium { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; }
         .status-dot.ok { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
         .exception-count {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: bold;
         }
         .exception-percent {
@@ -242,6 +284,7 @@
         .source-badge.vauto { background: rgba(0,255,136,0.2); color: #00ff88; }
         .source-badge.lojack { background: rgba(255,170,0,0.2); color: #ffaa00; }
         .source-badge.oem { background: rgba(123,44,191,0.2); color: #a855f7; }
+        .source-badge.floorplan { background: rgba(255,71,87,0.2); color: #ff6b6b; }
 
         /* Make Distribution Table */
         .make-table {
@@ -330,6 +373,7 @@
             font-size: 0.8rem;
             font-weight: bold;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .action-priority.p1 { background: #ff4757; }
         .action-priority.p2 { background: #ffaa00; color: #000; }
@@ -373,42 +417,70 @@
             .kpi-value { font-size: 1.8rem; }
             .charts-grid { grid-template-columns: 1fr; }
             .aging-grid { grid-template-columns: repeat(2, 1fr); }
+            .quick-actions { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>VIN Exception Dashboard</h1>
-        <div class="subtitle">Ahmed Group - Inventory Reconciliation Across 4 Systems</div>
+        <div class="subtitle">Ahmed Group - Inventory Reconciliation Across 5 Systems</div>
         <div class="last-updated" id="lastUpdated">Last Updated: Loading...</div>
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div class="quick-actions">
+        <a href="https://docs.google.com/spreadsheets/d/1R1eskQhOAQqpVILrBfb3QId5KUroEztPQ6WAzTIL4rQ/edit?usp=sharing" target="_blank" class="action-btn primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+            </svg>
+            Open VIN Matrix (Google Sheets)
+        </a>
+        <a href="https://dodgemiami-team-e6pomihc.atlassian.net/wiki/x/AoAwC" target="_blank" class="action-btn secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            View Documentation
+        </a>
+        <button onclick="refreshDashboard()" class="action-btn secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Refresh Data
+        </button>
     </div>
 
     <!-- Executive KPIs -->
     <div class="kpi-grid">
         <div class="kpi-card">
-            <div class="kpi-value kpi-good" id="totalVins">41,162</div>
-            <div class="kpi-label">Total Vehicles Tracked</div>
-            <div class="kpi-change bg-good">Across 4 Systems</div>
+            <div class="kpi-value kpi-good" id="totalVins">43,466</div>
+            <div class="kpi-label">Total Vehicles</div>
+            <div class="kpi-change bg-good">Across 5 Systems</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-value kpi-good" id="alignedPct">27.03%</div>
+            <div class="kpi-value kpi-good" id="alignedPct">15.4%</div>
             <div class="kpi-label">Fully Aligned</div>
-            <div class="kpi-change bg-good">11,125 vehicles</div>
+            <div class="kpi-change bg-good">6,683 vehicles</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-value kpi-critical" id="criticalCount">397</div>
+            <div class="kpi-value kpi-critical" id="criticalCount">4,689</div>
             <div class="kpi-label">Critical Exceptions</div>
             <div class="kpi-change bg-critical">Immediate Action</div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-value kpi-warning" id="highCount">8,543</div>
+            <div class="kpi-value kpi-warning" id="highCount">18,905</div>
             <div class="kpi-label">High Priority</div>
             <div class="kpi-change bg-warning">Revenue Impact</div>
         </div>
         <div class="kpi-card">
+            <div class="kpi-value" style="color: #ff6b6b;" id="floorplanRisk">3,972</div>
+            <div class="kpi-label">FloorPlan Risk</div>
+            <div class="kpi-change bg-critical">Paying Interest</div>
+        </div>
+        <div class="kpi-card">
             <div class="kpi-value" style="color: #00d4ff;" id="avgAge">98.7</div>
             <div class="kpi-label">Avg Days on Lot</div>
-            <div class="kpi-change" style="background: rgba(0,212,255,0.15); color: #00d4ff;">Marketing Metric</div>
+            <div class="kpi-change" style="background: rgba(0,212,255,0.15); color: #00d4ff;">Aging Metric</div>
         </div>
     </div>
 
@@ -417,24 +489,29 @@
         <h2>Financial Impact Summary</h2>
         <div class="financial-grid">
             <div class="financial-card critical">
+                <div class="financial-title">FloorPlan Without CDK Entry</div>
+                <div class="financial-value" style="color: #ff4757;">$139.0M</div>
+                <div class="financial-detail">3,972 vehicles on Ally FloorPlan not in DMS - Paying interest!</div>
+            </div>
+            <div class="financial-card critical">
                 <div class="financial-title">Inventory Not Being Marketed</div>
-                <div class="financial-value" style="color: #ff4757;">$184.1M</div>
-                <div class="financial-detail">5,260 vehicles not listed online - Lost sales opportunities</div>
+                <div class="financial-value" style="color: #ff4757;">$460.1M</div>
+                <div class="financial-detail">13,146 vehicles not listed online - Lost sales opportunities</div>
             </div>
             <div class="financial-card warning">
-                <div class="financial-title">Monthly Floorplan Cost at Risk</div>
-                <div class="financial-value" style="color: #ffaa00;">$2.76M</div>
-                <div class="financial-detail">Carrying cost on unmarketable inventory</div>
+                <div class="financial-title">Monthly FloorPlan Interest at Risk</div>
+                <div class="financial-value" style="color: #ffaa00;">$5.8M</div>
+                <div class="financial-detail">Carrying cost on 13,146 unmarketable vehicles @ ~0.5%/mo</div>
             </div>
             <div class="financial-card info">
                 <div class="financial-title">Vehicles Without GPS Tracking</div>
-                <div class="financial-value" style="color: #00d4ff;">$420M</div>
-                <div class="financial-detail">9,334 vehicles exposed to theft/loss risk</div>
+                <div class="financial-value" style="color: #00d4ff;">$139.2M</div>
+                <div class="financial-detail">3,093 vehicles exposed to theft/loss risk</div>
             </div>
             <div class="financial-card critical">
                 <div class="financial-title">OEM Allocations at Risk</div>
-                <div class="financial-value" style="color: #ff4757;">$15.9M</div>
-                <div class="financial-detail">397 allocated units not received in DMS</div>
+                <div class="financial-value" style="color: #ff4757;">$28.7M</div>
+                <div class="financial-detail">717 allocated units not received in DMS</div>
             </div>
         </div>
     </div>
@@ -446,15 +523,30 @@
             <div class="exception-header">
                 <div class="exception-status">
                     <span class="status-dot critical"></span>
-                    <span>CRITICAL</span>
+                    <span>CRITICAL - FloorPlan</span>
                 </div>
                 <div>
-                    <span class="exception-count" style="color: #ff4757;">397</span>
-                    <span class="exception-percent">(0.96%)</span>
+                    <span class="exception-count" style="color: #ff4757;">3,972</span>
+                    <span class="exception-percent">(9.14%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">FloorPlan (Ally) vehicles NOT in CDK - Paying interest on inventory not entered in DMS!</div>
+            <div class="exception-action">ACTION: Immediate data entry - $139M inventory accruing interest daily</div>
+        </div>
+
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot critical"></span>
+                    <span>CRITICAL - OEM</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #ff4757;">717</span>
+                    <span class="exception-percent">(1.65%)</span>
                 </div>
             </div>
             <div class="exception-desc">OEM allocation not in CDK - Factory allocated vehicles not showing in DMS</div>
-            <div class="exception-action">ACTION: Check receiving dock, verify delivery status with OEM</div>
+            <div class="exception-action">ACTION: Check receiving dock, verify delivery status with OEM rep</div>
         </div>
 
         <div class="exception-card">
@@ -464,12 +556,12 @@
                     <span>HIGH - Not Marketed</span>
                 </div>
                 <div>
-                    <span class="exception-count" style="color: #ffaa00;">5,260</span>
-                    <span class="exception-percent">(12.78%)</span>
+                    <span class="exception-count" style="color: #ffaa00;">13,146</span>
+                    <span class="exception-percent">(30.24%)</span>
                 </div>
             </div>
             <div class="exception-desc">In CDK but missing from vAuto - Vehicles not being advertised online</div>
-            <div class="exception-action">ACTION: Add to vAuto immediately - $184M inventory sitting dark</div>
+            <div class="exception-action">ACTION: Add to vAuto immediately - $460M inventory sitting dark</div>
         </div>
 
         <div class="exception-card">
@@ -479,11 +571,11 @@
                     <span>HIGH - Ghost Listings</span>
                 </div>
                 <div>
-                    <span class="exception-count" style="color: #ffaa00;">3,283</span>
-                    <span class="exception-percent">(7.98%)</span>
+                    <span class="exception-count" style="color: #ffaa00;">5,759</span>
+                    <span class="exception-percent">(13.25%)</span>
                 </div>
             </div>
-            <div class="exception-desc">In vAuto but not in CDK - Advertising vehicles that may be sold</div>
+            <div class="exception-desc">In vAuto but not in CDK - Advertising vehicles that may be sold or missing</div>
             <div class="exception-action">ACTION: Remove from listings or verify data sync issue</div>
         </div>
 
@@ -494,8 +586,8 @@
                     <span>MEDIUM - No Tracking</span>
                 </div>
                 <div>
-                    <span class="exception-count" style="color: #00d4ff;">4,936</span>
-                    <span class="exception-percent">(11.99%)</span>
+                    <span class="exception-count" style="color: #00d4ff;">3,093</span>
+                    <span class="exception-percent">(7.12%)</span>
                 </div>
             </div>
             <div class="exception-desc">No LoJack GPS tracking installed - Exposed to theft/lot management issues</div>
@@ -506,11 +598,11 @@
             <div class="exception-header">
                 <div class="exception-status">
                     <span class="status-dot ok"></span>
-                    <span>OK - Aligned</span>
+                    <span>OK - Core Aligned</span>
                 </div>
                 <div>
-                    <span class="exception-count" style="color: #00ff88;">11,125</span>
-                    <span class="exception-percent">(27.03%)</span>
+                    <span class="exception-count" style="color: #00ff88;">6,683</span>
+                    <span class="exception-percent">(15.38%)</span>
                 </div>
             </div>
             <div class="exception-desc">Core systems aligned - CDK, vAuto, and LoJack all synchronized</div>
@@ -524,23 +616,23 @@
                     <span>REVIEW</span>
                 </div>
                 <div>
-                    <span class="exception-count" style="color: #888;">16,161</span>
-                    <span class="exception-percent">(39.26%)</span>
+                    <span class="exception-count" style="color: #888;">10,096</span>
+                    <span class="exception-percent">(23.23%)</span>
                 </div>
             </div>
             <div class="exception-desc">Various combination flags - Requires investigation</div>
-            <div class="exception-action">ACTION: Review combination matrix for specific issues</div>
+            <div class="exception-action">ACTION: <a href="https://docs.google.com/spreadsheets/d/1R1eskQhOAQqpVILrBfb3QId5KUroEztPQ6WAzTIL4rQ/edit" target="_blank" style="color:#00d4ff;">Review VIN Matrix for specific issues</a></div>
         </div>
     </div>
 
     <!-- Charts Row -->
     <div class="charts-grid">
         <div class="chart-container">
-            <div class="chart-title">Data Source Coverage</div>
+            <div class="chart-title">Data Source Coverage (5 Systems)</div>
             <canvas id="sourceChart"></canvas>
         </div>
         <div class="chart-container">
-            <div class="chart-title">Exception Distribution</div>
+            <div class="chart-title">Exception Distribution by Priority</div>
             <canvas id="exceptionChart"></canvas>
         </div>
     </div>
@@ -586,14 +678,13 @@
                 </tr>
             </thead>
             <tbody id="makeTableBody">
-                <!-- Populated by JS -->
             </tbody>
         </table>
     </div>
 
     <!-- Data Sources Status -->
     <div class="chart-container" style="margin-bottom: 30px;">
-        <div class="chart-title">Data Source Status</div>
+        <div class="chart-title">Data Source Status (5 Systems)</div>
         <table class="sources-table">
             <thead>
                 <tr>
@@ -608,30 +699,37 @@
                 <tr>
                     <td><span class="source-badge cdk">CDK</span></td>
                     <td>DMS - Source of Truth</td>
-                    <td id="cdkCount">21,321</td>
-                    <td>51.8%</td>
+                    <td id="cdkCount">22,922</td>
+                    <td>52.7%</td>
                     <td style="color: #00ff88;">Active</td>
                 </tr>
                 <tr>
                     <td><span class="source-badge vauto">vAuto</span></td>
                     <td>Online Marketing & Pricing</td>
                     <td id="vautoCount">19,468</td>
-                    <td>47.3%</td>
+                    <td>44.8%</td>
                     <td style="color: #00ff88;">Active</td>
                 </tr>
                 <tr>
                     <td><span class="source-badge lojack">LoJack</span></td>
                     <td>GPS Tracking & Security</td>
-                    <td id="lojackCount">29,660</td>
-                    <td>72.1%</td>
+                    <td id="lojackCount">27,981</td>
+                    <td>64.4%</td>
                     <td style="color: #00ff88;">Active</td>
                 </tr>
                 <tr>
                     <td><span class="source-badge oem">OEM</span></td>
                     <td>Factory Allocations</td>
                     <td id="oemCount">1,386</td>
-                    <td>3.4%</td>
+                    <td>3.2%</td>
                     <td style="color: #ffaa00;">Weekly Update</td>
+                </tr>
+                <tr>
+                    <td><span class="source-badge floorplan">FloorPlan</span></td>
+                    <td>Ally Financial - FloorPlan</td>
+                    <td id="floorplanCount">8,775</td>
+                    <td>20.2%</td>
+                    <td style="color: #00ff88;">Daily Update</td>
                 </tr>
             </tbody>
         </table>
@@ -644,44 +742,55 @@
             <li class="action-item">
                 <span class="action-priority p1">P1</span>
                 <div class="action-content">
-                    <h4>Investigate 397 OEM Allocations Not Received</h4>
+                    <h4>Enter 3,972 FloorPlan Vehicles into CDK</h4>
+                    <p>Ally Financial shows these vehicles on floorplan but they're NOT in CDK. You're paying interest on inventory not entered in DMS!</p>
+                </div>
+                <div class="action-impact">
+                    <div class="value" style="color:#ff4757;">$139.0M</div>
+                    <div class="label">Accruing Interest</div>
+                </div>
+            </li>
+            <li class="action-item">
+                <span class="action-priority p1">P1</span>
+                <div class="action-content">
+                    <h4>Investigate 717 OEM Allocations Not Received</h4>
                     <p>Factory-allocated vehicles not appearing in CDK. Check receiving dock, verify with OEM rep, potential data entry backlog.</p>
                 </div>
                 <div class="action-impact">
-                    <div class="value">$15.9M</div>
+                    <div class="value" style="color:#ff4757;">$28.7M</div>
                     <div class="label">At Risk</div>
                 </div>
             </li>
             <li class="action-item">
                 <span class="action-priority p2">P2</span>
                 <div class="action-content">
-                    <h4>Add 5,260 Vehicles to vAuto Listings</h4>
+                    <h4>Add 13,146 Vehicles to vAuto Listings</h4>
                     <p>Inventory in CDK but not being marketed online. Immediate revenue opportunity - these vehicles are invisible to online shoppers.</p>
                 </div>
                 <div class="action-impact">
-                    <div class="value">$184.1M</div>
+                    <div class="value">$460.1M</div>
                     <div class="label">Not Marketed</div>
                 </div>
             </li>
             <li class="action-item">
                 <span class="action-priority p2">P2</span>
                 <div class="action-content">
-                    <h4>Remove 3,283 Ghost Listings from vAuto</h4>
-                    <p>Vehicles advertised online but not in DMS. Could be sold units, data sync issues, or duplicate VINs. Creates customer frustration.</p>
+                    <h4>Remove 5,759 Ghost Listings from vAuto</h4>
+                    <p>Vehicles advertised online but not in DMS. Could be sold units, data sync issues, or duplicates. Creates customer frustration.</p>
                 </div>
                 <div class="action-impact">
-                    <div class="value">3,283</div>
+                    <div class="value">5,759</div>
                     <div class="label">VINs to Review</div>
                 </div>
             </li>
             <li class="action-item">
                 <span class="action-priority p3">P3</span>
                 <div class="action-content">
-                    <h4>Install LoJack on 9,334 Untracked Vehicles</h4>
+                    <h4>Install LoJack on 3,093 Untracked Vehicles</h4>
                     <p>Vehicles without GPS tracking are exposed to theft and lot management issues. Prioritize high-value units first.</p>
                 </div>
                 <div class="action-impact">
-                    <div class="value">$420M</div>
+                    <div class="value">$139.2M</div>
                     <div class="label">Unprotected</div>
                 </div>
             </li>
@@ -692,42 +801,39 @@
     <div class="footer">
         <p>VIN Exception Dashboard | Ahmed Group | Data refreshed daily at 6:00 AM CT</p>
         <p style="margin-top: 10px;">
-            <a href="https://dodgemiami-team-e6pomihc.atlassian.net/wiki/pages/viewpage.action?pageId=137822210" target="_blank">View Confluence Documentation</a> |
-            Data Sources: CDK, vAuto, LoJack, OEM
+            <a href="https://docs.google.com/spreadsheets/d/1R1eskQhOAQqpVILrBfb3QId5KUroEztPQ6WAzTIL4rQ/edit" target="_blank">Open VIN Matrix</a> |
+            <a href="https://dodgemiami-team-e6pomihc.atlassian.net/wiki/x/AoAwC" target="_blank">Confluence Documentation</a> |
+            Data Sources: CDK, vAuto, LoJack, OEM, Ally FloorPlan
         </p>
     </div>
 
     <script>
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
-            // Update timestamp
-            const now = new Date();
-            document.getElementById('lastUpdated').textContent =
-                'Last Updated: ' + now.toLocaleString('en-US', {
-                    year: 'numeric', month: 'short', day: 'numeric',
-                    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
-                });
+            updateTimestamp();
 
-            // Source Coverage Chart
+            // Source Coverage Chart (5 Systems)
             const sourceCtx = document.getElementById('sourceChart').getContext('2d');
             new Chart(sourceCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['CDK (DMS)', 'vAuto (Marketing)', 'LoJack (GPS)', 'OEM (Allocations)'],
+                    labels: ['CDK (DMS)', 'vAuto (Marketing)', 'LoJack (GPS)', 'OEM (Allocations)', 'FloorPlan (Ally)'],
                     datasets: [{
                         label: 'Vehicle Count',
-                        data: [21321, 19468, 29660, 1386],
+                        data: [22922, 19468, 27981, 1386, 8775],
                         backgroundColor: [
                             'rgba(0, 212, 255, 0.7)',
                             'rgba(0, 255, 136, 0.7)',
                             'rgba(255, 170, 0, 0.7)',
-                            'rgba(168, 85, 247, 0.7)'
+                            'rgba(168, 85, 247, 0.7)',
+                            'rgba(255, 107, 107, 0.7)'
                         ],
                         borderColor: [
                             'rgba(0, 212, 255, 1)',
                             'rgba(0, 255, 136, 1)',
                             'rgba(255, 170, 0, 1)',
-                            'rgba(168, 85, 247, 1)'
+                            'rgba(168, 85, 247, 1)',
+                            'rgba(255, 107, 107, 1)'
                         ],
                         borderWidth: 2
                     }]
@@ -756,9 +862,9 @@
             new Chart(exceptionCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Critical', 'High Priority', 'Medium', 'OK', 'Review'],
+                    labels: ['Critical (FloorPlan+OEM)', 'High Priority', 'Medium', 'OK', 'Review'],
                     datasets: [{
-                        data: [397, 8543, 4936, 11125, 16161],
+                        data: [4689, 18905, 3093, 6683, 10096],
                         backgroundColor: [
                             'rgba(255, 71, 87, 0.8)',
                             'rgba(255, 170, 0, 0.8)',
@@ -814,13 +920,21 @@
                 makeTableBody.appendChild(tr);
             });
 
-            // Auto-refresh data
             loadDashboardData();
         });
 
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent =
+                'Last Updated: ' + now.toLocaleString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+                });
+        }
+
         async function loadDashboardData() {
             try {
-                const response = await fetch('dashboard_data.json');
+                const response = await fetch('dashboard_data.json?t=' + Date.now());
                 if (response.ok) {
                     const data = await response.json();
                     updateDashboard(data);
@@ -832,9 +946,16 @@
 
         function updateDashboard(data) {
             if (data.summary) {
-                // Update KPIs from live data
                 document.getElementById('totalVins').textContent =
-                    data.summary.total_vins?.toLocaleString() || '41,162';
+                    data.summary.total_vins?.toLocaleString() || '43,466';
+                if (data.summary.cdk_count) {
+                    document.getElementById('cdkCount').textContent =
+                        data.summary.cdk_count.toLocaleString();
+                }
+                if (data.summary.floorplan_count) {
+                    document.getElementById('floorplanCount').textContent =
+                        data.summary.floorplan_count.toLocaleString();
+                }
             }
             if (data.lastUpdated) {
                 document.getElementById('lastUpdated').textContent =
@@ -842,8 +963,33 @@
             }
         }
 
-        // Refresh every 5 minutes
+        async function refreshDashboard() {
+            const btn = event.target.closest('.action-btn');
+            btn.innerHTML = '<svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="animation: spin 1s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Refreshing...';
+            try {
+                const response = await fetch('https://us-central1-sonorous-key-320714.cloudfunctions.net/refresh-vin-dashboard');
+                if (response.ok) {
+                    await loadDashboardData();
+                    updateTimestamp();
+                    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Refreshed!';
+                    setTimeout(() => {
+                        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Refresh Data';
+                    }, 2000);
+                }
+            } catch (error) {
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg> Refresh Data';
+                console.error('Refresh failed:', error);
+            }
+        }
+
+        // Auto-refresh every 5 minutes
         setInterval(loadDashboardData, 300000);
     </script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </body>
 </html>
