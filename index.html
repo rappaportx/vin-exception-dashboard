@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIN Exception Dashboard - Ahmed Group</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+        .header .last-updated {
+            color: #00d4ff;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.2);
+        }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .kpi-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .kpi-change {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .kpi-good { color: #00ff88; }
+        .kpi-warning { color: #ffaa00; }
+        .kpi-critical { color: #ff4757; }
+        .bg-good { background: rgba(0,255,136,0.15); }
+        .bg-warning { background: rgba(255,170,0,0.15); }
+        .bg-critical { background: rgba(255,71,87,0.15); }
+
+        /* Financial Impact Section */
+        .financial-section {
+            background: linear-gradient(135deg, rgba(123,44,191,0.2) 0%, rgba(0,212,255,0.1) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(123,44,191,0.3);
+        }
+        .financial-section h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .financial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .financial-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid;
+        }
+        .financial-card.critical { border-left-color: #ff4757; }
+        .financial-card.warning { border-left-color: #ffaa00; }
+        .financial-card.info { border-left-color: #00d4ff; }
+        .financial-title {
+            font-size: 1rem;
+            color: #a0a0a0;
+            margin-bottom: 10px;
+        }
+        .financial-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .financial-detail {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Exception Status Grid */
+        .section-title {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0,212,255,0.3);
+        }
+        .exception-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .exception-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .exception-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .exception-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .status-dot.critical { background: #ff4757; box-shadow: 0 0 10px #ff4757; }
+        .status-dot.high { background: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+        .status-dot.medium { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; }
+        .status-dot.ok { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+        .exception-count {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .exception-percent {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .exception-desc {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .exception-action {
+            background: rgba(0,212,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #00d4ff;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .chart-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        /* Data Sources Table */
+        .sources-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .sources-table th,
+        .sources-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sources-table th {
+            background: rgba(0,212,255,0.1);
+            color: #00d4ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        .sources-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        .source-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .source-badge.cdk { background: rgba(0,212,255,0.2); color: #00d4ff; }
+        .source-badge.vauto { background: rgba(0,255,136,0.2); color: #00ff88; }
+        .source-badge.lojack { background: rgba(255,170,0,0.2); color: #ffaa00; }
+        .source-badge.oem { background: rgba(123,44,191,0.2); color: #a855f7; }
+
+        /* Make Distribution Table */
+        .make-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .make-table th,
+        .make-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .make-table th {
+            background: rgba(0,212,255,0.1);
+            color: #00d4ff;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .progress-fill.good { background: linear-gradient(90deg, #00ff88, #00d4ff); }
+        .progress-fill.warning { background: linear-gradient(90deg, #ffaa00, #ff6b6b); }
+
+        /* Aging Chart */
+        .aging-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .aging-card {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .aging-days {
+            font-size: 1.1rem;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .aging-count {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .aging-value {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* Action Items */
+        .action-section {
+            background: rgba(255,71,87,0.1);
+            border: 1px solid rgba(255,71,87,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .action-section h2 {
+            color: #ff4757;
+            margin-bottom: 20px;
+        }
+        .action-list {
+            list-style: none;
+        }
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .action-priority {
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .action-priority.p1 { background: #ff4757; }
+        .action-priority.p2 { background: #ffaa00; color: #000; }
+        .action-priority.p3 { background: #00d4ff; color: #000; }
+        .action-content h4 {
+            margin-bottom: 5px;
+        }
+        .action-content p {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+        .action-impact {
+            margin-left: auto;
+            text-align: right;
+        }
+        .action-impact .value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00ff88;
+        }
+        .action-impact .label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        .footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .kpi-value { font-size: 1.8rem; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .aging-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VIN Exception Dashboard</h1>
+        <div class="subtitle">Ahmed Group - Inventory Reconciliation Across 4 Systems</div>
+        <div class="last-updated" id="lastUpdated">Last Updated: Loading...</div>
+    </div>
+
+    <!-- Executive KPIs -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-value kpi-good" id="totalVins">41,162</div>
+            <div class="kpi-label">Total Vehicles Tracked</div>
+            <div class="kpi-change bg-good">Across 4 Systems</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-good" id="alignedPct">27.03%</div>
+            <div class="kpi-label">Fully Aligned</div>
+            <div class="kpi-change bg-good">11,125 vehicles</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-critical" id="criticalCount">397</div>
+            <div class="kpi-label">Critical Exceptions</div>
+            <div class="kpi-change bg-critical">Immediate Action</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-warning" id="highCount">8,543</div>
+            <div class="kpi-label">High Priority</div>
+            <div class="kpi-change bg-warning">Revenue Impact</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value" style="color: #00d4ff;" id="avgAge">98.7</div>
+            <div class="kpi-label">Avg Days on Lot</div>
+            <div class="kpi-change" style="background: rgba(0,212,255,0.15); color: #00d4ff;">Marketing Metric</div>
+        </div>
+    </div>
+
+    <!-- Financial Impact -->
+    <div class="financial-section">
+        <h2>Financial Impact Summary</h2>
+        <div class="financial-grid">
+            <div class="financial-card critical">
+                <div class="financial-title">Inventory Not Being Marketed</div>
+                <div class="financial-value" style="color: #ff4757;">$184.1M</div>
+                <div class="financial-detail">5,260 vehicles not listed online - Lost sales opportunities</div>
+            </div>
+            <div class="financial-card warning">
+                <div class="financial-title">Monthly Floorplan Cost at Risk</div>
+                <div class="financial-value" style="color: #ffaa00;">$2.76M</div>
+                <div class="financial-detail">Carrying cost on unmarketable inventory</div>
+            </div>
+            <div class="financial-card info">
+                <div class="financial-title">Vehicles Without GPS Tracking</div>
+                <div class="financial-value" style="color: #00d4ff;">$420M</div>
+                <div class="financial-detail">9,334 vehicles exposed to theft/loss risk</div>
+            </div>
+            <div class="financial-card critical">
+                <div class="financial-title">OEM Allocations at Risk</div>
+                <div class="financial-value" style="color: #ff4757;">$15.9M</div>
+                <div class="financial-detail">397 allocated units not received in DMS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exception Status Cards -->
+    <h2 class="section-title">Exception Status Breakdown</h2>
+    <div class="exception-grid">
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot critical"></span>
+                    <span>CRITICAL</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #ff4757;">397</span>
+                    <span class="exception-percent">(0.96%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">OEM allocation not in CDK - Factory allocated vehicles not showing in DMS</div>
+            <div class="exception-action">ACTION: Check receiving dock, verify delivery status with OEM</div>
+        </div>
+
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot high"></span>
+                    <span>HIGH - Not Marketed</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #ffaa00;">5,260</span>
+                    <span class="exception-percent">(12.78%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">In CDK but missing from vAuto - Vehicles not being advertised online</div>
+            <div class="exception-action">ACTION: Add to vAuto immediately - $184M inventory sitting dark</div>
+        </div>
+
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot high"></span>
+                    <span>HIGH - Ghost Listings</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #ffaa00;">3,283</span>
+                    <span class="exception-percent">(7.98%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">In vAuto but not in CDK - Advertising vehicles that may be sold</div>
+            <div class="exception-action">ACTION: Remove from listings or verify data sync issue</div>
+        </div>
+
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot medium"></span>
+                    <span>MEDIUM - No Tracking</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #00d4ff;">4,936</span>
+                    <span class="exception-percent">(11.99%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">No LoJack GPS tracking installed - Exposed to theft/lot management issues</div>
+            <div class="exception-action">ACTION: Schedule LoJack installation for high-value units first</div>
+        </div>
+
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot ok"></span>
+                    <span>OK - Aligned</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #00ff88;">11,125</span>
+                    <span class="exception-percent">(27.03%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">Core systems aligned - CDK, vAuto, and LoJack all synchronized</div>
+            <div class="exception-action">STATUS: No action required - Continue monitoring</div>
+        </div>
+
+        <div class="exception-card">
+            <div class="exception-header">
+                <div class="exception-status">
+                    <span class="status-dot" style="background: #888;"></span>
+                    <span>REVIEW</span>
+                </div>
+                <div>
+                    <span class="exception-count" style="color: #888;">16,161</span>
+                    <span class="exception-percent">(39.26%)</span>
+                </div>
+            </div>
+            <div class="exception-desc">Various combination flags - Requires investigation</div>
+            <div class="exception-action">ACTION: Review combination matrix for specific issues</div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+        <div class="chart-container">
+            <div class="chart-title">Data Source Coverage</div>
+            <canvas id="sourceChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <div class="chart-title">Exception Distribution</div>
+            <canvas id="exceptionChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Inventory Aging -->
+    <div class="chart-container" style="margin-bottom: 30px;">
+        <div class="chart-title">Inventory Aging Analysis</div>
+        <div class="aging-grid">
+            <div class="aging-card">
+                <div class="aging-days">0-30 Days</div>
+                <div class="aging-count" style="color: #00ff88;">5,309</div>
+                <div class="aging-value">Avg $37,804</div>
+            </div>
+            <div class="aging-card">
+                <div class="aging-days">31-60 Days</div>
+                <div class="aging-count" style="color: #00d4ff;">3,670</div>
+                <div class="aging-value">Avg $40,123</div>
+            </div>
+            <div class="aging-card">
+                <div class="aging-days">61-90 Days</div>
+                <div class="aging-count" style="color: #ffaa00;">2,482</div>
+                <div class="aging-value">Avg $41,290</div>
+            </div>
+            <div class="aging-card">
+                <div class="aging-days">90+ Days</div>
+                <div class="aging-count" style="color: #ff4757;">7,372</div>
+                <div class="aging-value">Avg $43,930</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Make Distribution -->
+    <div class="chart-container" style="margin-bottom: 30px;">
+        <div class="chart-title">Inventory by Make - Exception Rate</div>
+        <table class="make-table">
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Total Vehicles</th>
+                    <th>High Priority Issues</th>
+                    <th>Exception Rate</th>
+                    <th>Health</th>
+                </tr>
+            </thead>
+            <tbody id="makeTableBody">
+                <!-- Populated by JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Data Sources Status -->
+    <div class="chart-container" style="margin-bottom: 30px;">
+        <div class="chart-title">Data Source Status</div>
+        <table class="sources-table">
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>System</th>
+                    <th>Vehicle Count</th>
+                    <th>Coverage</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="source-badge cdk">CDK</span></td>
+                    <td>DMS - Source of Truth</td>
+                    <td id="cdkCount">21,321</td>
+                    <td>51.8%</td>
+                    <td style="color: #00ff88;">Active</td>
+                </tr>
+                <tr>
+                    <td><span class="source-badge vauto">vAuto</span></td>
+                    <td>Online Marketing & Pricing</td>
+                    <td id="vautoCount">19,468</td>
+                    <td>47.3%</td>
+                    <td style="color: #00ff88;">Active</td>
+                </tr>
+                <tr>
+                    <td><span class="source-badge lojack">LoJack</span></td>
+                    <td>GPS Tracking & Security</td>
+                    <td id="lojackCount">29,660</td>
+                    <td>72.1%</td>
+                    <td style="color: #00ff88;">Active</td>
+                </tr>
+                <tr>
+                    <td><span class="source-badge oem">OEM</span></td>
+                    <td>Factory Allocations</td>
+                    <td id="oemCount">1,386</td>
+                    <td>3.4%</td>
+                    <td style="color: #ffaa00;">Weekly Update</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Priority Action Items -->
+    <div class="action-section">
+        <h2>Priority Action Items</h2>
+        <ul class="action-list">
+            <li class="action-item">
+                <span class="action-priority p1">P1</span>
+                <div class="action-content">
+                    <h4>Investigate 397 OEM Allocations Not Received</h4>
+                    <p>Factory-allocated vehicles not appearing in CDK. Check receiving dock, verify with OEM rep, potential data entry backlog.</p>
+                </div>
+                <div class="action-impact">
+                    <div class="value">$15.9M</div>
+                    <div class="label">At Risk</div>
+                </div>
+            </li>
+            <li class="action-item">
+                <span class="action-priority p2">P2</span>
+                <div class="action-content">
+                    <h4>Add 5,260 Vehicles to vAuto Listings</h4>
+                    <p>Inventory in CDK but not being marketed online. Immediate revenue opportunity - these vehicles are invisible to online shoppers.</p>
+                </div>
+                <div class="action-impact">
+                    <div class="value">$184.1M</div>
+                    <div class="label">Not Marketed</div>
+                </div>
+            </li>
+            <li class="action-item">
+                <span class="action-priority p2">P2</span>
+                <div class="action-content">
+                    <h4>Remove 3,283 Ghost Listings from vAuto</h4>
+                    <p>Vehicles advertised online but not in DMS. Could be sold units, data sync issues, or duplicate VINs. Creates customer frustration.</p>
+                </div>
+                <div class="action-impact">
+                    <div class="value">3,283</div>
+                    <div class="label">VINs to Review</div>
+                </div>
+            </li>
+            <li class="action-item">
+                <span class="action-priority p3">P3</span>
+                <div class="action-content">
+                    <h4>Install LoJack on 9,334 Untracked Vehicles</h4>
+                    <p>Vehicles without GPS tracking are exposed to theft and lot management issues. Prioritize high-value units first.</p>
+                </div>
+                <div class="action-impact">
+                    <div class="value">$420M</div>
+                    <div class="label">Unprotected</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>VIN Exception Dashboard | Ahmed Group | Data refreshed daily at 6:00 AM CT</p>
+        <p style="margin-top: 10px;">
+            <a href="https://dodgemiami-team-e6pomihc.atlassian.net/wiki/pages/viewpage.action?pageId=137822210" target="_blank">View Confluence Documentation</a> |
+            Data Sources: CDK, vAuto, LoJack, OEM
+        </p>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update timestamp
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent =
+                'Last Updated: ' + now.toLocaleString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+                });
+
+            // Source Coverage Chart
+            const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+            new Chart(sourceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['CDK (DMS)', 'vAuto (Marketing)', 'LoJack (GPS)', 'OEM (Allocations)'],
+                    datasets: [{
+                        label: 'Vehicle Count',
+                        data: [21321, 19468, 29660, 1386],
+                        backgroundColor: [
+                            'rgba(0, 212, 255, 0.7)',
+                            'rgba(0, 255, 136, 0.7)',
+                            'rgba(255, 170, 0, 0.7)',
+                            'rgba(168, 85, 247, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(0, 212, 255, 1)',
+                            'rgba(0, 255, 136, 1)',
+                            'rgba(255, 170, 0, 1)',
+                            'rgba(168, 85, 247, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#a0a0a0' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#a0a0a0' }
+                        }
+                    }
+                }
+            });
+
+            // Exception Distribution Chart
+            const exceptionCtx = document.getElementById('exceptionChart').getContext('2d');
+            new Chart(exceptionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Critical', 'High Priority', 'Medium', 'OK', 'Review'],
+                    datasets: [{
+                        data: [397, 8543, 4936, 11125, 16161],
+                        backgroundColor: [
+                            'rgba(255, 71, 87, 0.8)',
+                            'rgba(255, 170, 0, 0.8)',
+                            'rgba(0, 212, 255, 0.8)',
+                            'rgba(0, 255, 136, 0.8)',
+                            'rgba(136, 136, 136, 0.8)'
+                        ],
+                        borderColor: '#1a1a2e',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#ffffff', padding: 15 }
+                        }
+                    }
+                }
+            });
+
+            // Populate Make Table
+            const makeData = [
+                { make: 'Jeep', total: 2895, issues: 357 },
+                { make: 'Ford', total: 2650, issues: 801 },
+                { make: 'Nissan', total: 2371, issues: 923 },
+                { make: 'Ram', total: 2123, issues: 310 },
+                { make: 'Kia', total: 1891, issues: 243 },
+                { make: 'Hyundai', total: 1493, issues: 291 },
+                { make: 'Chevrolet', total: 1335, issues: 237 },
+                { make: 'Volkswagen', total: 981, issues: 206 },
+                { make: 'Subaru', total: 906, issues: 379 },
+                { make: 'Dodge', total: 722, issues: 270 }
+            ];
+
+            const makeTableBody = document.getElementById('makeTableBody');
+            makeData.forEach(row => {
+                const rate = ((row.issues / row.total) * 100).toFixed(1);
+                const isGood = rate < 25;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${row.make}</strong></td>
+                    <td>${row.total.toLocaleString()}</td>
+                    <td style="color: ${isGood ? '#00ff88' : '#ffaa00'}">${row.issues.toLocaleString()}</td>
+                    <td>${rate}%</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${isGood ? 'good' : 'warning'}" style="width: ${100 - rate}%"></div>
+                        </div>
+                    </td>
+                `;
+                makeTableBody.appendChild(tr);
+            });
+
+            // Auto-refresh data
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('dashboard_data.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDashboard(data);
+                }
+            } catch (error) {
+                console.log('Using static data - JSON refresh not available');
+            }
+        }
+
+        function updateDashboard(data) {
+            if (data.summary) {
+                // Update KPIs from live data
+                document.getElementById('totalVins').textContent =
+                    data.summary.total_vins?.toLocaleString() || '41,162';
+            }
+            if (data.lastUpdated) {
+                document.getElementById('lastUpdated').textContent =
+                    'Last Updated: ' + new Date(data.lastUpdated).toLocaleString();
+            }
+        }
+
+        // Refresh every 5 minutes
+        setInterval(loadDashboardData, 300000);
+    </script>
+</body>
+</html>

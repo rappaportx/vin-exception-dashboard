@@ -1,0 +1,385 @@
+{
+  "exception_summary": [
+    {
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK",
+      "PRIORITY": 1,
+      "vehicle_count": 397,
+      "percentage": 0.96
+    },
+    {
+      "EXCEPTION_STATUS": "HIGH: In CDK but not marketed (vAuto)",
+      "PRIORITY": 2,
+      "vehicle_count": 5260,
+      "percentage": 12.78
+    },
+    {
+      "EXCEPTION_STATUS": "HIGH: In vAuto but not in CDK",
+      "PRIORITY": 2,
+      "vehicle_count": 3283,
+      "percentage": 7.98
+    },
+    {
+      "EXCEPTION_STATUS": "MEDIUM: No LoJack tracking",
+      "PRIORITY": 3,
+      "vehicle_count": 4936,
+      "percentage": 11.99
+    },
+    {
+      "EXCEPTION_STATUS": "REVIEW: Check combination",
+      "PRIORITY": 4,
+      "vehicle_count": 16161,
+      "percentage": 39.26
+    },
+    {
+      "EXCEPTION_STATUS": "OK: Core systems aligned",
+      "PRIORITY": 4,
+      "vehicle_count": 11125,
+      "percentage": 27.03
+    }
+  ],
+  "summary": {
+    "total_vins": 41162,
+    "cdk_count": 21321,
+    "vauto_count": 19468,
+    "lojack_count": 29660,
+    "oem_count": 1386
+  },
+  "combination_matrix": [
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 0,
+      "vehicle_count": 15906
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 0,
+      "vehicle_count": 10528
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 0,
+      "vehicle_count": 4580
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 0,
+      "vehicle_count": 4389
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 0,
+      "vehicle_count": 1688
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 0,
+      "vehicle_count": 1595
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 0,
+      "vehicle_count": 835
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 1,
+      "vehicle_count": 597
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 1,
+      "vehicle_count": 356
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 1,
+      "vehicle_count": 257
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 0,
+      "vehicle_count": 255
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 1,
+      "vehicle_count": 63
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 1,
+      "LOJACK_FLAG": 0,
+      "OEM_FLAG": 1,
+      "vehicle_count": 61
+    },
+    {
+      "CDK_FLAG": 1,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 1,
+      "vehicle_count": 27
+    },
+    {
+      "CDK_FLAG": 0,
+      "VAUTO_FLAG": 0,
+      "LOJACK_FLAG": 1,
+      "OEM_FLAG": 1,
+      "vehicle_count": 16
+    }
+  ],
+  "make_distribution": [
+    {
+      "make": "Jeep",
+      "total_vehicles": 2895,
+      "high_priority_exceptions": 357
+    },
+    {
+      "make": "Ford",
+      "total_vehicles": 2650,
+      "high_priority_exceptions": 801
+    },
+    {
+      "make": "Nissan",
+      "total_vehicles": 2371,
+      "high_priority_exceptions": 923
+    },
+    {
+      "make": "Ram",
+      "total_vehicles": 2123,
+      "high_priority_exceptions": 310
+    },
+    {
+      "make": "Kia",
+      "total_vehicles": 1891,
+      "high_priority_exceptions": 243
+    },
+    {
+      "make": "Hyundai",
+      "total_vehicles": 1493,
+      "high_priority_exceptions": 291
+    },
+    {
+      "make": "Chevrolet",
+      "total_vehicles": 1335,
+      "high_priority_exceptions": 237
+    },
+    {
+      "make": "Volkswagen",
+      "total_vehicles": 981,
+      "high_priority_exceptions": 206
+    },
+    {
+      "make": "Subaru",
+      "total_vehicles": 906,
+      "high_priority_exceptions": 379
+    },
+    {
+      "make": "Dodge",
+      "total_vehicles": 722,
+      "high_priority_exceptions": 270
+    }
+  ],
+  "financial": {
+    "avg_price": 41113.0,
+    "marketed_value": 637096009.0,
+    "avg_age_days": 98.7
+  },
+  "aging": [
+    {
+      "age_bucket": "0-30 days",
+      "vehicle_count": 5309,
+      "avg_price": "37804"
+    },
+    {
+      "age_bucket": "31-60 days",
+      "vehicle_count": 3670,
+      "avg_price": "40123"
+    },
+    {
+      "age_bucket": "61-90 days",
+      "vehicle_count": 2482,
+      "avg_price": "41290"
+    },
+    {
+      "age_bucket": "90+ days",
+      "vehicle_count": 7372,
+      "avg_price": "43930"
+    }
+  ],
+  "impact": {
+    "not_marketed_count": 5260,
+    "not_marketed_value": 184100000.0,
+    "no_tracking_count": 9334,
+    "no_tracking_value": 420030000,
+    "oem_not_received": 397,
+    "oem_value_at_risk": 15880000
+  },
+  "critical_vins": [
+    {
+      "vin": "5NMJACDE9TH680462",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8HECA34TU413837",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KMHLM4DG4SU094536",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8RMES26TU050093",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KMHL64JA1SA516578",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KMHL64JA5TA563243",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "5NMJECDE9TH679932",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8RMESA3TU055386",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8RMES22TU089389",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "5NMJB3DE8TH664878",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "5NMJBCDE5TH680410",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KMHLM4DJ8TU184950",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8JBDD28SU393884",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8HACAB8TU352334",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "5NMJBCDE7TH624064",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "5NTJBDDE2TH168310",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "5NMJACDE1TH679600",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KMHRC8A31TU437066",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8RMESA5TU052781",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    },
+    {
+      "vin": "KM8RJES20TU051216",
+      "make": "Unknown",
+      "model": "Unknown",
+      "year": null,
+      "EXCEPTION_STATUS": "CRITICAL: OEM allocation not in CDK"
+    }
+  ],
+  "lastUpdated": "2026-01-30T21:57:22.508313",
+  "generated_by": "export_vin_data.py"
+}
